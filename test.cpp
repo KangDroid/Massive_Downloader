@@ -50,10 +50,16 @@ void download_function(ContainerQueue* data) {
     }
 }
 
-int main(void) {
+int main(int argc, char** argv) {
+    if (argc != 2) {
+        cout << "Usage: program_name file_path" << endl;
+        cout << "Where program name is compiled program and file path is FULL path to txt file" << endl;
+        cout << "eg: ./a.out \"/Users/kangdroid/test.txt\"" << endl;
+        return 0;
+    } 
     const int thread_ctr = std::thread::hardware_concurrency();
-    ifstream ctr("test.txt");
-    ifstream ifs("test.txt");
+    ifstream ctr(argv[1]);
+    ifstream ifs(argv[1]);
     string tmp;
     int container_max = 0;
     ContainerQueue thread_queue[thread_ctr];
