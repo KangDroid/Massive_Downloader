@@ -42,19 +42,20 @@ public:
     }
 };
 
-void download_function(ContainerQueue* data) {
+void download_function(ContainerQueue* data, char* save_directory) {
+    string dir = string(save_directory);
     for (int i = 0; i < data->head; i++) {
         Container t = data->pop();
-        string command = "wget -O ./folder/" + t.file_name + ".jpg " + t.url_dir + " >> /dev/null";
+        string command = "wget -O "+ dir + t.file_name + ".jpg " + t.url_dir + " >> /dev/null";
         system(command.c_str());
     }
 }
 
 int main(int argc, char** argv) {
-    if (argc != 2) {
-        cout << "Usage: program_name file_path" << endl;
-        cout << "Where program name is compiled program and file path is FULL path to txt file" << endl;
-        cout << "eg: ./a.out \"/Users/kangdroid/test.txt\"" << endl;
+    if (argc != 3) {
+        cout << "Usage: program_name file_path save_path" << endl;
+        cout << "Where program name is compiled program and file path is FULL path to txt file, and save_path is full path to save directory" << endl;
+        cout << "eg: ./a.out \"/Users/kangdroid/test.txt\" \"/Users/kangdroid/Desktop/folder/\" "<< endl;
         return 0;
     } 
     const int thread_ctr = std::thread::hardware_concurrency();
@@ -95,8 +96,7 @@ int main(int argc, char** argv) {
     for (int i = 0; i < thread_ctr; i++) {
         pid_t t_f = fork();
         if (t_f == 0) {
-            printf("[son] pid %d from [parent] pid %d\n",getpid(),getppid());
-            download_function(&thread_queue[i]);
+            download_function(&thread_queue[i], argv[2]);
             //sleep(5);
             exit(0);
         }
