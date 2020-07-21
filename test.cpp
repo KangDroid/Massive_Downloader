@@ -5,8 +5,6 @@
 
 using namespace std;
 
-pthread_mutex_t mutex_locker = PTHREAD_MUTEX_INITIALIZER;
-
 class Container {
 public:
     string file_name;
@@ -54,11 +52,16 @@ void download_function(ContainerQueue* data) {
 
 int main(void) {
     const int thread_ctr = std::thread::hardware_concurrency();
-    pthread_t thread_what[thread_ctr];
-    ifstream ifs("majorproject.txt");
+    ifstream ctr("test.txt");
+    ifstream ifs("test.txt");
     string tmp;
-    int container_max = 596;
+    int container_max = 0;
     ContainerQueue thread_queue[thread_ctr];
+
+    // Get length of file
+    while (getline(ctr, tmp)) {
+        container_max++;
+    }
 
     // Each queue have length but what?
     int each_length = container_max / thread_ctr;
