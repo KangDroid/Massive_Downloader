@@ -2,45 +2,9 @@
 #include <fstream>
 #include <thread>
 #include <unistd.h>
+#include "ContainerQueue.h"
 
 using namespace std;
-
-class Container {
-public:
-    string file_name;
-    string url_dir;
-    Container(string fn, string url) {
-        this->file_name = fn;
-        this->url_dir = url;
-    }
-    Container() {}
-};
-
-class ContainerQueue {
-public:
-    Container* ctr;
-    int max_val;
-    int head;
-    int tail;
-    ContainerQueue() {}
-    ~ContainerQueue() {
-        delete[] ctr;
-    }
-    void init(int max) {
-        this->head = 0;
-        this->tail = 0;
-        this->max_val = max;
-        this->ctr = new Container[max];
-    }
-
-    void push(Container& cont_val) {
-        this->ctr[head++] = cont_val;
-    }
-
-    Container pop() {
-        return this->ctr[tail++];
-    }
-};
 
 void download_function(ContainerQueue* data, char* save_directory) {
     string dir = string(save_directory);
